@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { getPixabayImages } from 'api/PixabayAPI';
+import { getPixabayImages } from 'api/PixabayApi';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
