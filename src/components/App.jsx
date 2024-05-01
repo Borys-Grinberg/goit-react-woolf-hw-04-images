@@ -1,15 +1,12 @@
-import { createContext, useEffect, useState } from 'react';
-import { getPixabayImages } from 'api/PixabayApi';
-
+import React, { useState, useEffect } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
-import { Modal } from './Modal/Modal';
+import { getPixabayImages } from 'api/PixabayApi';
+import Modal from './Modal/Modal';
 
 import css from './App.module.css';
-
-const IMAGES_PER_PAGE = 12;
 
 const App = () => {
   const [images, setImages] = useState([]);
@@ -20,50 +17,50 @@ const App = () => {
   const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
-    const getImages = async () => {
-      try {
-        setLoading(true);
-        setLoadMore(false);
-
-        const data = await getPixabayImages(query, page, IMAGES_PER_PAGE);
-        const updatedImages = prev => {
-          return [...prev, ...data.hits];
-        };
-
-        setImages(updatedImages);
-        setLoadMore(page < Math.ceil(data.totalHits / IMAGES_PER_PAGE));
-      } catch (error) {
-        console.log(`Something went wrong... Cause: ${error}`);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (query) {
-      getImages(query, page);
-    }
+    getImages(query, page);
   }, [query, page]);
 
-  const onSearchSubmit = search => {
-    if (query !== search) {
-      setImages([]);
-      setPage(1);
-      setQuery(search);
+  const onSearchSubmit = query => {
+    setImages([]);
+    setQuery(query);
+    setPage(1);
+    setLoadMore(false);
+  };
+
+  const onLoadMoreClick = () => {
+    setPage(prevPage => prevPage + 1);
+  };
+
+  const toggleCurrentImage = image => {
+    setCurrentImage(image);
+  };
+
+  const getImages = async (query, page) => {
+    try {
+      setLoading(true);
+      const data = await getPixabayImages(query, page);
+      setImages(prevImages => [...prevImages, ...data.hits]);
+      setLoadMore(images.length < data.totalHits);
+    } catch (error) {
+      console.log(`Something went wrong... Cause: ${error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className={css.app}>
       <Searchbar onSearchSubmit={onSearchSubmit} />
-      <AppContext.Provider value={{ setCurrentImage }}>
-        {images && <ImageGallery images={images} />}
-        {currentImage && <Modal image={currentImage} />}
-      </AppContext.Provider>
+      {images && (
+        <ImageGallery images={images} toggleCurrentImage={toggleCurrentImage} />
+      )}
       {loading && <Loader />}
-      {loadMore && <Button page={page} setPage={setPage} />}
+      {loadMore && <Button loadMore={onLoadMoreClick} />}
+      {currentImage && (
+        <Modal image={currentImage} toggleCurrentImage={toggleCurrentImage} />
+      )}
     </div>
   );
 };
 
-export const AppContext = createContext();
 export default App;
