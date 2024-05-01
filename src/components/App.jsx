@@ -4,7 +4,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import { getPixabayImages } from 'api/PixabayApi';
-import Modal from './Modal/Modal';
+import { Modal } from './Modal/Modal';
 
 import css from './App.module.css';
 
