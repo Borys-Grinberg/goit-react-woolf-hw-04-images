@@ -1,10 +1,7 @@
-import { useContext, useEffect } from 'react';
-import { AppContext } from 'components/App';
+import { useEffect } from 'react';
 import css from './Modal.module.css';
 
-export const Modal = ({ image }) => {
-  const { setCurrentImage } = useContext(AppContext);
-
+export const Modal = ({ image, setCurrentImage }) => {
   useEffect(() => {
     const onEscPress = evt => {
       if (evt.code === 'Escape') {
