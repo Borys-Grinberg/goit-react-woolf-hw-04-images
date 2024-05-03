@@ -42,9 +42,9 @@ const App = () => {
     setLoadMore(false);
   };
 
-  const onLoadMoreClick = () => {
-    setPage(prevPage => prevPage + 1);
-  };
+  //const onLoadMoreClick = () => {
+  // setPage(prevPage => prevPage + 1);
+  // };
 
   const toggleCurrentImage = image => {
     setCurrentImage(image);
