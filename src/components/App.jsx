@@ -32,7 +32,7 @@ const App = () => {
     };
 
     getImages(query, page);
-  }, [query, page]);
+  }, [query, page, images.length]);
 
   const onSearchSubmit = query => {
     setImages([]);
