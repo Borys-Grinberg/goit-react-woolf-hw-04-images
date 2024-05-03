@@ -17,6 +17,20 @@ const App = () => {
   const [currentImage, setCurrentImage] = useState(null);
 
   useEffect(() => {
+    if (!query) return;
+    const getImages = async (query, page) => {
+      try {
+        setLoading(true);
+        const data = await getPixabayImages(query, page);
+        setImages(prevImages => [...prevImages, ...data.hits]);
+        setLoadMore(images.length < data.totalHits);
+      } catch (error) {
+        console.log(`Something went wrong... Cause: ${error}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     getImages(query, page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, page]);
@@ -36,19 +50,6 @@ const App = () => {
     setCurrentImage(image);
   };
 
-  const getImages = async (query, page) => {
-    try {
-      setLoading(true);
-      const data = await getPixabayImages(query, page);
-      setImages(prevImages => [...prevImages, ...data.hits]);
-      setLoadMore(images.length < data.totalHits);
-    } catch (error) {
-      console.log(`Something went wrong... Cause: ${error}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className={css.app}>
       <Searchbar onSearchSubmit={onSearchSubmit} />
@@ -56,7 +57,8 @@ const App = () => {
         <ImageGallery images={images} toggleCurrentImage={toggleCurrentImage} />
       )}
       {loading && <Loader />}
-      {loadMore && <Button loadMore={onLoadMoreClick} />}
+      {loadMore && <Button page={page} setPage={setPage} />}
+
       {currentImage && (
         <Modal image={currentImage} toggleCurrentImage={toggleCurrentImage} />
       )}

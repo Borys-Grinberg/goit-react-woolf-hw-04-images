@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import css from './Modal.module.css';
 
-export const Modal = ({ image, setCurrentImage }) => {
+export const Modal = ({ image, toggleCurrentImage }) => {
   useEffect(() => {
     const onEscPress = evt => {
       if (evt.code === 'Escape') {
-        setCurrentImage(null);
+        toggleCurrentImage(null);
       }
     };
 
@@ -14,12 +14,10 @@ export const Modal = ({ image, setCurrentImage }) => {
     return () => {
       document.removeEventListener('keydown', onEscPress);
     };
-  }, [setCurrentImage]);
+  }, [toggleCurrentImage]);
 
-  const onClick = evt => {
-    if (evt.target === evt.currentTarget) {
-      setCurrentImage(null);
-    }
+  const onClick = () => {
+    toggleCurrentImage(null);
   };
 
   return (
