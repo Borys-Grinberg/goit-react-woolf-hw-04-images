@@ -32,7 +32,6 @@ const App = () => {
     };
 
     getImages(query, page);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, page]);
 
   const onSearchSubmit = query => {
