@@ -16,8 +16,10 @@ export const Modal = ({ image, toggleCurrentImage }) => {
     };
   }, [toggleCurrentImage]);
 
-  const onClick = () => {
-    toggleCurrentImage(null);
+  const onClick = event => {
+    if (event.target === event.currentTarget) {
+      toggleCurrentImage(null);
+    }
   };
 
   return (
