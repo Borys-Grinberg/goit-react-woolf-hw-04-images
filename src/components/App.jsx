@@ -31,6 +31,7 @@ const App = () => {
           // Altrimenti, concatena le nuove immagini alle immagini esistenti
           setImages(prevImages => [...prevImages, ...data.hits]);
         }
+
         // Imposta il flag per il caricamento ulteriore solo se ci sono più immagini disponibili
         setLoadMore(data.hits.length === imagesPerPage);
       } catch (error) {
