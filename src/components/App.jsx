@@ -15,15 +15,24 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
+  const imagesPerPage = 12; // Numero massimo di immagini per pagina
 
   useEffect(() => {
     if (!query) return;
+
     const getImages = async (query, page) => {
       try {
         setLoading(true);
         const data = await getPixabayImages(query, page);
-        setImages(prevImages => [...prevImages, ...data.hits]);
-        setLoadMore(images.length < data.totalHits);
+        // Se è la prima pagina, imposta semplicemente le immagini
+        if (page === 1) {
+          setImages(data.hits);
+        } else {
+          // Altrimenti, concatena le nuove immagini alle immagini esistenti
+          setImages(prevImages => [...prevImages, ...data.hits]);
+        }
+        // Imposta il flag per il caricamento ulteriore solo se ci sono più immagini disponibili
+        setLoadMore(data.hits.length === imagesPerPage);
       } catch (error) {
         console.log(`Something went wrong... Cause: ${error}`);
       } finally {
@@ -32,7 +41,7 @@ const App = () => {
     };
 
     getImages(query, page);
-  }, [query, page, images.length]);
+  }, [query, page]);
 
   const onSearchSubmit = query => {
     setImages([]);
