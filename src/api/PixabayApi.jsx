@@ -11,7 +11,7 @@ export const getPixabayImages = async (query, page, imagesPerPage) => {
       key: API_KEY,
       image_type: 'photo',
       orientation: 'horizontal',
-      per_page: imagesPerPage,
+      per_page: 12,
     },
   });
   return data;
