@@ -15,7 +15,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
-  const imagesPerPage = 12; // Numero massimo di immagini per pagina
+  const imagesPerPage = 12;
 
   useEffect(() => {
     if (!query) return;
@@ -24,15 +24,15 @@ const App = () => {
       try {
         setLoading(true);
         const data = await getPixabayImages(query, page);
-        // Se è la prima pagina, imposta semplicemente le immagini
+
         if (page === 1) {
           setImages(data.hits);
         } else {
-          // Altrimenti, concatena le nuove immagini alle immagini esistenti
+          // приєднує нові зображ. до наявних
           setImages(prevImages => [...prevImages, ...data.hits]);
         }
 
-        // Imposta il flag per il caricamento ulteriore solo se ci sono più immagini disponibili
+        // завантаження тільки якщо є наявні зображення
         setLoadMore(data.hits.length === imagesPerPage);
       } catch (error) {
         console.log(`Something went wrong... Cause: ${error}`);
